@@ -1533,6 +1533,16 @@ input.t-subject {
 
 .guide-steps em { font-style: italic; color: var(--ink); }
 
+.guide-sub {
+  margin: 18px 0 6px !important;
+  font-family: var(--sans);
+  font-size: .78rem !important;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink) !important;
+}
+
 .guide-callout {
   margin: 14px 0 0 !important;
   padding: 12px 14px;
