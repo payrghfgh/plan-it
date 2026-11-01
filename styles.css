@@ -1331,6 +1331,140 @@ input.t-subject {
 
 .topic-line.is-unscheduled .topic-left { color: var(--amber-ink); }
 
+/* ---------- welcome steps ---------- */
+
+.welcome-steps {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+  max-width: 58ch;
+}
+
+.welcome-steps li {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 10px;
+  align-items: baseline;
+  padding: 9px 0;
+  border-top: 1px solid var(--rule-soft);
+  font-size: .93rem;
+  color: var(--ink-2);
+}
+
+.welcome-steps li:last-child { border-bottom: 1px solid var(--rule-soft); }
+
+.welcome-steps strong { color: var(--ink); font-weight: 600; }
+
+.ws-n {
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--amber);
+}
+
+.welcome-guide {
+  margin: 16px 0 0;
+  font-size: .82rem;
+  color: var(--muted);
+}
+
+.quiet-link {
+  color: var(--ink-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+
+.quiet-link:hover { color: var(--ink); }
+
+.wordmark-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---------- the guide page ---------- */
+
+.guide-lede {
+  margin: 0 0 12px;
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+/* scoped to the guide page: the app's own paragraphs have their own voices */
+.guide .step-body p {
+  margin: 0 0 12px;
+  max-width: 62ch;
+  font-size: .95rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.guide .step-body p:last-child { margin-bottom: 0; }
+
+.guide .step-body strong { color: var(--ink); font-weight: 600; }
+
+.guide-list {
+  margin: 0 0 16px;
+  display: grid;
+  gap: 14px;
+}
+
+.guide-list dt {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: .95rem;
+}
+
+.guide-list dd {
+  margin: 3px 0 0;
+  max-width: 62ch;
+  font-size: .93rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.guide-h {
+  margin: 28px 0 10px;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.12rem;
+  color: var(--ink);
+  padding-top: 12px;
+  border-top: 1px solid var(--rule-soft);
+}
+
+.guide-steps {
+  margin: 0 0 16px;
+  padding-left: 20px;
+  max-width: 62ch;
+  font-size: .93rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.guide-steps li { margin-bottom: 7px; }
+
+.file {
+  font-family: var(--mono);
+  font-size: .86em;
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 1px;
+}
+
+.guide-note {
+  margin: 14px 0 0 !important;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule-soft);
+  font-size: .88rem !important;
+  color: var(--muted) !important;
+}
+
+.guide-back { margin: 24px 0 0 !important; }
+
+.export-help { margin: 10px 0 0; }
+
 /* ---------- motion ----------
    Quiet and quick, to match the mood of a paper planner. Nothing here is
    decoration: each move either confirms a press, shows where something came

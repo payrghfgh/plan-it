@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Plan It works — every part, and what the files are</title>
+<meta name="description" content="A short guide to Plan It: the three steps, the timetable, and what the .ics, .csv and .json exports are — including how to import them into Apple Calendar, Google Calendar or Outlook.">
+<meta name="theme-color" content="#e9ecf0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d1218" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23161d26'/%3E%3Crect x='6' y='9' width='20' height='2' fill='%23c98a2b'/%3E%3Crect x='6' y='15' width='13' height='1.6' fill='%23f2f4f7'/%3E%3Crect x='6' y='21' width='17' height='1.6' fill='%23f2f4f7' opacity='.55'/%3E%3C/svg%3E">
+</head>
+<body>
+<div class="sheet">
+
+  <header class="masthead">
+    <div class="masthead-top">
+      <h1 class="wordmark"><a class="wordmark-link" href="index.html">Plan It</a></h1>
+      <p class="issue"><a class="quiet-link" href="index.html">&larr; Back to the planner</a></p>
+    </div>
+    <p class="standfirst">How every part of Plan It works, including what the export files are and where they go.</p>
+  </header>
+
+  <main class="document guide">
+
+    <section class="step" aria-labelledby="g-what">
+      <div class="gutter">
+        <span class="step-num" aria-hidden="true">1</span>
+        <h2 class="step-label" id="g-what">The idea</h2>
+      </div>
+      <div class="step-body">
+        <p class="guide-lede">One exam. The topics on it. The hours you actually have.</p>
+        <p>Plan It works out how long each topic needs, spreads that across the days you have left, and holds a little back for revision. If the work does not fit, it says so in hours and puts the surplus in a list rather than pretending.</p>
+        <p>There is nothing to sign into. The plan lives in this browser, and the exports below are how you take it somewhere else.</p>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="g-deadline">
+      <div class="gutter">
+        <span class="step-num" aria-hidden="true">2</span>
+        <h2 class="step-label" id="g-deadline">The deadline</h2>
+      </div>
+      <div class="step-body">
+        <dl class="guide-list">
+          <dt>Exam or submission date</dt>
+          <dd>The day you are working towards. Nothing is scheduled on it or after it, so the plan always ends the night before.</dd>
+
+          <dt>Hours a day you can really study</dt>
+          <dd>The number you would honestly hit on a normal day, not the number a good week would allow. Every day is capped at this.</dd>
+
+          <dt>Study starts at</dt>
+          <dd>Only used by the calendar export, so each session gets a real clock time. It does not change the plan itself.</dd>
+
+          <dt>Days off</dt>
+          <dd>Tap the weekdays you know you won't study. Nothing lands there — not new work, not even a review.</dd>
+        </dl>
+        <p class="guide-note">Under the fields you'll see the arithmetic: "That's 12 study days and 30 hours in total." That is the ceiling everything else is measured against.</p>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="g-topics">
+      <div class="gutter">
+        <span class="step-num" aria-hidden="true">3</span>
+        <h2 class="step-label" id="g-topics">The topics</h2>
+      </div>
+      <div class="step-body">
+        <p>The fastest way in is to paste a list — one topic per line — and press <strong>Add these</strong>. Everything arrives at confidence 3 and size M, and you can adjust from there.</p>
+        <dl class="guide-list">
+          <dt>Subject</dt>
+          <dd>Free text, and it remembers what you have typed. It groups the timetable and stops two sessions of the same subject landing back to back.</dd>
+
+          <dt>Confidence, the five dots</dt>
+          <dd>How solid you feel. One dot means shaky and earns the topic more time; five means nearly there and earns it less. It is the strongest lever on the estimate.</dd>
+
+          <dt>Size, S / M / L</dt>
+          <dd>Rough first-pass work: about 30 minutes, an hour, two hours. Confidence then scales it, so a shaky S and a solid L are not the same shape of problem.</dd>
+        </dl>
+        <p class="guide-note">The running total in the margin — "9 topics, about 11 hours" — is the estimate before revision, not the plan.</p>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="g-plan">
+      <div class="gutter">
+        <span class="step-num" aria-hidden="true">4</span>
+        <h2 class="step-label" id="g-plan">The plan</h2>
+      </div>
+      <div class="step-body">
+        <p>One row per day, in date order. Today sits in amber; the rest get quieter as they get further away. The line at the top of the plan reads out what today holds, in plain words.</p>
+        <dl class="guide-list">
+          <dt>Ticking a session</dt>
+          <dd>Ticks are saved the moment you make them, so the plan survives closing the tab. The strip in the margin fills in as you go.</dd>
+
+          <dt>Rebalance</dt>
+          <dd>For after you miss a few days. Everything still unticked — including days that have passed — goes back into the queue and is rescheduled into the days that are left. Ticked sessions stay exactly where they are, and anything that no longer fits goes to "If you get time". Nothing is deleted.</dd>
+
+          <dt>If you get time</dt>
+          <dd>At the bottom of the plan. These are the topics past what the calendar can hold. They are not scheduled, but they are not lost either.</dd>
+
+          <dt>Where each topic stands</dt>
+          <dd>A fold-out list of every topic with its sessions, how many are done, and the time left on it.</dd>
+
+          <dt>Start over</dt>
+          <dd>Clears the topics and the plan from this browser. Export a copy first if you might want it back.</dd>
+        </dl>
+      </div>
+    </section>
+
+    <section class="step" id="files" aria-labelledby="g-files">
+      <div class="gutter">
+        <span class="step-num" aria-hidden="true">5</span>
+        <h2 class="step-label" id="g-files">Taking it with you</h2>
+      </div>
+      <div class="step-body">
+        <p>Under the plan there is a fold-out called <strong>Take it with you</strong>. It holds four buttons. None of them needs an account, and none of them sends anything anywhere — the file is built in your browser and downloaded to your device.</p>
+
+        <h3 class="guide-h">Calendar file <span class="file">.ics</span></h3>
+        <p>Every session becomes its own timed event: the topic as the title, the subject as the category, and the duration as the real start and end. A day that starts at 09:00 with a 45-minute session, a 10-minute break and a 30-minute session comes out as 09:00–09:45, then 09:55–10:25. The exam date is added as an all-day event, and if anything is sitting in "If you get time" it is listed in that event's notes.</p>
+        <p>The times carry no timezone on purpose, so each calendar reads them as local time — 09:00 means nine in the morning wherever you are.</p>
+        <p>It is a standard iCalendar file, which every calendar app already understands:</p>
+        <ol class="guide-steps">
+          <li><strong>Apple Calendar on a Mac</strong> — File → Import, pick the file, then choose which calendar it goes into.</li>
+          <li><strong>iPhone or iPad</strong> — open the file from Mail or Files and tap Add All.</li>
+          <li><strong>Google Calendar</strong> — on a computer, the gear → Settings → Import &amp; export, choose the file and the calendar, then Import. The phone app cannot import files; do it once on the web and it syncs everywhere.</li>
+          <li><strong>Outlook</strong> — on the web, Add calendar → Upload from file. On the desktop app, File → Open &amp; Export → Import an iCalendar (.ics).</li>
+        </ol>
+
+        <h3 class="guide-h">Spreadsheet <span class="file">.csv</span></h3>
+        <p>One row per session: date, weekday, subject, topic, minutes, type, and whether it is done. The "if you get time" topics are included at the bottom, marked as not scheduled. Useful if you would rather sort, filter, or keep a record of what you actually did.</p>
+        <ol class="guide-steps">
+          <li><strong>Excel</strong> — Data → From Text/CSV.</li>
+          <li><strong>Numbers</strong> — open the file directly.</li>
+          <li><strong>Google Sheets</strong> — File → Import → Upload.</li>
+        </ol>
+
+        <h3 class="guide-h">Save a copy <span class="file">.json</span></h3>
+        <p>The whole plan, ticks included, in a file. It is not meant to be read — it is the thing you keep. This browser is the only place the plan lives, so if you clear your browsing data, or want the plan on another machine, this is the file that brings it back.</p>
+
+        <h3 class="guide-h">Restore a copy</h3>
+        <p>Pick the <span class="file">.json</span> you saved and the plan comes back exactly as it was — topics, hours, days off, and every tick. Restore is also on the welcome screen, because the moment you most need it is the moment the plan is not on screen. A file that is not a Plan It backup is refused with a plain message rather than a half-loaded plan.</p>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="g-print">
+      <div class="gutter">
+        <span class="step-num" aria-hidden="true">6</span>
+        <h2 class="step-label" id="g-print">Print</h2>
+      </div>
+      <div class="step-body">
+        <p><strong>Print</strong> puts the timetable on paper, one week to a page, with the checkboxes showing so you can tick them with a pen. It uses your browser's print dialog, so "Save as PDF" there gives you a PDF of the same thing.</p>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="g-data">
+      <div class="gutter">
+        <span class="step-num" aria-hidden="true">7</span>
+        <h2 class="step-label" id="g-data">Where your data lives</h2>
+      </div>
+      <div class="step-body">
+        <p>Everything is kept in this browser, in one saved plan. No account, no server, no email, nothing uploaded. That also means: clearing your browser's site data clears the plan, and a different browser or device starts empty. A <span class="file">.json</span> copy is the only thing that crosses that gap.</p>
+        <p class="guide-back"><a class="btn btn-quiet" href="index.html">Back to the planner</a></p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <p>Plan It — a study planner for one exam. Plain HTML, CSS and JavaScript; it runs entirely in your browser.</p>
+  </footer>
+
+</div>
+</body>
+</html>

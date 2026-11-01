@@ -120,9 +120,15 @@ linked stylesheet.
 
 ## What it does beyond the plan
 
-- **A first-run welcome** with one honest sentence about what the page does and
-  a **See a sample plan** button that loads a realistic eight-topic exam in one
-  click, so the planner can be judged before anything is typed.
+- **A first-run welcome** that explains the thing in a paragraph and three
+  lines, with a **See a sample plan** button that loads a realistic eight-topic
+  exam in one click, so the planner can be judged before anything is typed, and
+  a link into the guide.
+- **A guide page** (`guide.html`) covering every feature: the deadline fields,
+  the confidence dots, Rebalance, the "if you get time" list, print, where the
+  data lives — and a section per export file explaining what it contains and the
+  exact menu path to import it into Apple Calendar, Google Calendar, Outlook,
+  Excel, Numbers and Google Sheets.
 - **Take it with you** — export from the plan:
   - `.ics` calendar file: **one timed event per session**, laid out through the
     day from the start time set in step 1, with the 10-minute breaks between
@@ -160,6 +166,7 @@ out as 09:00–09:45, then 09:55–10:25.
 | `styles.css` | Slate and off-white, amber for today, dark mode, print stylesheet |
 | `planner.js` | The scheduling engine. Pure functions, no DOM |
 | `app.js` | Reads the form, calls the engine, draws the plan, saves to `localStorage` |
+| `guide.html` | A guide to every part, and how to import the export files |
 | `tests/acceptance.js` | Every check from the brief, runnable with `node` |
 
 ## The scheduling rules

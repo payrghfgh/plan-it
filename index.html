@@ -21,7 +21,7 @@
       <h1 class="wordmark">Plan It</h1>
       <p class="issue"><span id="today-stamp">—</span></p>
     </div>
-    <p class="standfirst">One exam, a list of topics, and the hours you actually have. It saves in this browser and nothing leaves your device.</p>
+    <p class="standfirst">A study planner for one exam. It runs in this browser and nothing leaves your device.</p>
   </header>
 
   <div class="runninghead" id="runninghead" hidden>
@@ -33,7 +33,14 @@
 
     <section class="welcome" id="welcome" aria-labelledby="welcome-head">
       <h2 class="welcome-head" id="welcome-head">A plan you can actually keep.</h2>
-      <p class="welcome-body">It works out what to do each day, holds a little back for revision, and says plainly when something won't fit — no account, no app to install.</p>
+      <p class="welcome-body">Give it the date, the topics, and the hours you really have. It works out how long each topic needs, spreads that across the days you have left, holds a little back for revision, and says plainly when something won't fit instead of quietly pretending it will.</p>
+
+      <ol class="welcome-steps">
+        <li><span class="ws-n" aria-hidden="true">1</span><span><strong>The deadline.</strong> The date, the hours a day, and the days you don't study.</span></li>
+        <li><span class="ws-n" aria-hidden="true">2</span><span><strong>The topics.</strong> Paste your list, then say how shaky you feel on each one.</span></li>
+        <li><span class="ws-n" aria-hidden="true">3</span><span><strong>The plan.</strong> A timetable to tick off, print, or export to your calendar.</span></li>
+      </ol>
+
       <p class="welcome-actions">
         <button type="button" class="btn btn-quiet" id="btn-sample">See a sample plan</button>
         <span class="welcome-note">or work through the three steps below — about a minute</span>
@@ -41,6 +48,7 @@
       <p class="welcome-restore">Coming back to a plan you saved?
         <button type="button" class="btn-inline" id="btn-restore-welcome">Restore the file</button>
       </p>
+      <p class="welcome-guide">New here? <a class="btn-inline" href="guide.html">What every part does, and what the exported files are</a></p>
       <p class="export-status" id="welcome-status" role="status"></p>
       <input type="file" id="file-restore" accept="application/json,.json" hidden>
     </section>
@@ -138,6 +146,7 @@
             </div>
             <p class="export-note">The calendar file is a standard <span class="mono">.ics</span> — import it into Apple Calendar, Google Calendar, Outlook, Thunderbird, anything. Every session lands as its own timed event, starting from the time you set in step 1 and running through the day in order, breaks included. The JSON is the whole plan, ticks included — keep it somewhere that is not this browser.</p>
 
+            <p class="export-help"><a class="btn-inline" href="guide.html#files">How do I open these files?</a></p>
             <p class="export-status" id="export-status" role="status"></p>
           </div>
         </details>
@@ -156,7 +165,7 @@
   </main>
 
   <footer class="foot">
-    <p>Plan It keeps everything in this browser under one saved plan. Clearing your browser data clears it too. No account, no server, no email.</p>
+    <p>Plan It keeps everything in this browser under one saved plan. Clearing your browser data clears it too. No account, no server, no email. <a class="quiet-link" href="guide.html">How every part works &rarr;</a></p>
   </footer>
 
 </div>
