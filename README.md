@@ -1,5 +1,7 @@
 # Plan It
 
+**Live:** https://payrghfgh.github.io/plan-it/ (GitHub Pages, `main` branch, root)
+
 A static study planner for one exam. You give it a date, the hours you can
 actually study, your days off, and a list of topics. It gives you a day-by-day
 timetable, and it keeps it — ticks, sessions and all — in `localStorage`.
@@ -20,7 +22,15 @@ Opening `index.html` straight from the file system mostly works too, but some
 browsers block `localStorage` on `file://`, which would stop the plan from being
 saved between visits. Use the server above.
 
-## Deploy to Netlify
+## Deploy
+
+### GitHub Pages
+
+Already on. Settings → Pages → Deploy from a branch → `main` / `/ (root)`. Every
+push to `main` republishes. Pages needs the repository to be public on a free
+GitHub plan; on a paid plan a private repository works too.
+
+### Netlify
 
 The repo is deployable as-is.
 
