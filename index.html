@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan It — a study plan for one exam</title>
+<meta name="description" content="Plan It turns an exam date and a topic list into a day-by-day study timetable that fits the hours you actually have. Runs in your browser and saves on your device.">
+<meta name="theme-color" content="#e9ecf0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d1218" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23161d26'/%3E%3Crect x='6' y='9' width='20' height='2' fill='%23c98a2b'/%3E%3Crect x='6' y='15' width='13' height='1.6' fill='%23f2f4f7'/%3E%3Crect x='6' y='21' width='17' height='1.6' fill='%23f2f4f7' opacity='.55'/%3E%3C/svg%3E">
+</head>
+<body>
+<div class="sheet">
+
+  <header class="masthead">
+    <div class="masthead-top">
+      <h1 class="wordmark">Plan It</h1>
+      <p class="issue"><span id="today-stamp">—</span></p>
+    </div>
+    <p class="standfirst">One exam, a list of topics, and the hours you actually have. It saves in this browser and nothing leaves your device.</p>
+  </header>
+
+  <div class="runninghead" id="runninghead" hidden>
+    <p class="rh-count"><span id="rh-days">0</span><span class="rh-unit" id="rh-unit">days</span></p>
+    <p class="rh-meta" id="rh-meta"></p>
+  </div>
+
+  <main class="document">
+
+    <section class="welcome" id="welcome" aria-labelledby="welcome-head">
+      <h2 class="welcome-head" id="welcome-head">A plan you can actually keep.</h2>
+      <p class="welcome-body">It works out what to do each day, holds a little back for revision, and says plainly when something won't fit — no account, no app to install.</p>
+      <p class="welcome-actions">
+        <button type="button" class="btn btn-quiet" id="btn-sample">See a sample plan</button>
+        <span class="welcome-note">or work through the three steps below — about a minute</span>
+      </p>
+      <p class="welcome-restore">Coming back to a plan you saved?
+        <button type="button" class="btn-inline" id="btn-restore-welcome">Restore the file</button>
+      </p>
+      <p class="export-status" id="welcome-status" role="status"></p>
+      <input type="file" id="file-restore" accept="application/json,.json" hidden>
+    </section>
+
+    <section class="step" id="step-deadline" aria-labelledby="h-deadline">
+      <div class="gutter">
+        <span class="step-num" aria-hidden="true">1</span>
+        <h2 class="step-label" id="h-deadline">The deadline</h2>
+      </div>
+      <div class="step-body">
+        <div class="fields">
+          <div class="field">
+            <label for="exam-date">Exam or submission date</label>
+            <input type="date" id="exam-date">
+          </div>
+          <div class="field field-hours">
+            <label for="hours">Hours a day you can really study</label>
+            <div class="num-wrap">
+              <input type="number" id="hours" min="0" max="16" step="0.5" value="2" inputmode="decimal">
+              <span class="unit">h</span>
+            </div>
+          </div>
+        </div>
+
+        <fieldset class="days-off">
+          <legend>Days off</legend>
+          <div class="day-toggles" id="day-toggles"></div>
+          <p class="note">Tap the ones you know you won't study. Nothing gets planned there.</p>
+        </fieldset>
+
+        <p class="verdict" id="deadline-summary" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="step" id="step-topics" aria-labelledby="h-topics" hidden>
+      <div class="gutter">
+        <span class="step-num" aria-hidden="true">2</span>
+        <h2 class="step-label" id="h-topics">The topics</h2>
+        <p class="gutter-note" id="topics-summary" aria-live="polite"></p>
+      </div>
+      <div class="step-body">
+        <div class="paste">
+          <label for="paste-box" class="paste-label">Paste your list</label>
+          <textarea id="paste-box" rows="4" spellcheck="false" placeholder="Fractions&#10;Photosynthesis&#10;The Cold War"></textarea>
+          <div class="paste-actions">
+            <button type="button" class="btn" id="add-pasted">Add these</button>
+            <p class="note">One per line. They come in at confidence 3, size M.</p>
+          </div>
+        </div>
+
+        <div id="topic-rows"></div>
+        <datalist id="subject-list"></datalist>
+
+        <div class="row-actions">
+          <button type="button" class="btn btn-quiet" id="add-row">One more topic</button>
+        </div>
+
+        <p class="note note-foot">Size is a rough first pass: S is about 30 minutes, M an hour, L two hours. Confidence scales it, so a shaky topic gets more of the calendar than a solid one.</p>
+      </div>
+    </section>
+
+    <section class="step" id="step-plan" aria-labelledby="h-plan" hidden>
+      <div class="gutter">
+        <span class="step-num" aria-hidden="true">3</span>
+        <h2 class="step-label" id="h-plan">The plan</h2>
+        <dl class="stats" id="plan-stats"></dl>
+        <div class="progress" id="progress" hidden>
+          <div class="ticks" id="progress-ticks" aria-hidden="true"></div>
+          <p class="progress-text" id="progress-text" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="step-body">
+        <div id="plan-notice"></div>
+        <p class="today-line" id="today-line"></p>
+
+        <div class="controls">
+          <button type="button" class="btn btn-quiet" id="btn-print">Print</button>
+          <button type="button" class="btn btn-quiet" id="btn-rebalance">Rebalance</button>
+          <button type="button" class="btn btn-quiet btn-danger" id="btn-reset">Start over</button>
+        </div>
+
+        <details class="export" id="export">
+          <summary>Take it with you</summary>
+          <div class="export-panel">
+            <div class="export-actions">
+              <button type="button" class="btn btn-quiet" id="btn-ics">Calendar file <span class="btn-ext">.ics</span></button>
+              <button type="button" class="btn btn-quiet" id="btn-csv">Spreadsheet <span class="btn-ext">.csv</span></button>
+              <button type="button" class="btn btn-quiet" id="btn-json">Save a copy <span class="btn-ext">.json</span></button>
+              <button type="button" class="btn btn-quiet" id="btn-restore">Restore a copy</button>
+            </div>
+            <p class="export-note">The calendar file adds one all-day event per study day to Google Calendar, Apple Calendar or Outlook. The JSON is the whole plan, ticks included — keep it somewhere that is not this browser.</p>
+
+            <div class="gcal">
+              <p class="gcal-head">Google Calendar</p>
+              <div class="gcal-links" id="gcal-links"></div>
+              <p class="gcal-note">One link, one event: it repeats on every study day and skips your days off, with the whole timetable in its description. No sign-in to this page and no API key. If you would rather have a separate event for each day, import the .ics above instead (Google Calendar → Settings → Import &amp; export). Google Tasks is deliberately not offered: creating tasks needs a signed-in API connection, and this page has no account.</p>
+            </div>
+
+            <p class="export-status" id="export-status" role="status"></p>
+          </div>
+        </details>
+
+        <div id="weeks"></div>
+
+        <details class="topic-progress" id="topic-progress" hidden>
+          <summary id="topic-progress-summary">Where each topic stands</summary>
+          <div id="topic-progress-body"></div>
+        </details>
+
+        <div id="overflow"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <p>Plan It keeps everything in this browser under one saved plan. Clearing your browser data clears it too. No account, no server, no email.</p>
+  </footer>
+
+</div>
+
+<script src="planner.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
