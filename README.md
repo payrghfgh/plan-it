@@ -124,11 +124,12 @@ linked stylesheet.
   lines, with a **See a sample plan** button that loads a realistic eight-topic
   exam in one click, so the planner can be judged before anything is typed, and
   a link into the guide.
-- **A guide page** (`guide.html`) covering every feature: the deadline fields,
-  the confidence dots, Rebalance, the "if you get time" list, print, where the
-  data lives — and a section per export file explaining what it contains and the
-  exact menu path to import it into Apple Calendar, Google Calendar, Outlook,
-  Excel, Numbers and Google Sheets.
+- **A guide page** (`guide.html`) written as tasks rather than features, because
+  "how do I actually do it" is the question people arrive with: make a plan,
+  put it in your calendar (with the exact taps for iPhone, Android, Google
+  Calendar on the web and Outlook), print it, keep a copy. A reference section
+  and a jump menu sit around those four, and the app's export fold-out names
+  what each file is for at the point you press the button.
 - **Take it with you** — export from the plan:
   - `.ics` calendar file: **one timed event per session**, laid out through the
     day from the start time set in step 1, with the 10-minute breaks between

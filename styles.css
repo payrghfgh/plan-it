@@ -1465,6 +1465,97 @@ input.t-subject {
 
 .export-help { margin: 10px 0 0; }
 
+/* ---------- guide: jump menu and task steps ---------- */
+
+.jump {
+  padding: 26px 0 30px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.jump-head {
+  margin: 0 0 10px;
+  font-family: var(--sans);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.jump-list {
+  margin: 0;
+  padding-left: 18px;
+  max-width: 62ch;
+  font-size: .95rem;
+  line-height: 1.75;
+}
+
+.jump-list a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--rule);
+}
+
+.jump-list a:hover { text-decoration-color: var(--ink); }
+
+/* a task list: numbers in the margin, one action per line */
+.guide-steps.is-numbered {
+  list-style: none;
+  padding-left: 0;
+  counter-reset: step;
+  max-width: 60ch;
+}
+
+.guide-steps.is-numbered li {
+  counter-increment: step;
+  position: relative;
+  padding: 8px 0 8px 30px;
+  border-top: 1px solid var(--rule-soft);
+  margin-bottom: 0;
+  font-size: .95rem;
+  line-height: 1.55;
+}
+
+.guide-steps.is-numbered li:last-child { border-bottom: 1px solid var(--rule-soft); }
+
+.guide-steps.is-numbered li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 20px;
+  font-family: var(--mono);
+  font-size: .74rem;
+  color: var(--amber);
+}
+
+.guide-steps em { font-style: italic; color: var(--ink); }
+
+/* what each export file is for, at the point of export */
+.export-what {
+  margin: 14px 0 0;
+  display: grid;
+  gap: 9px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule-soft);
+}
+
+.export-what dt {
+  font-size: .84rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.export-what dd {
+  margin: 2px 0 0;
+  font-size: .82rem;
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 56ch;
+}
+
 /* ---------- motion ----------
    Quiet and quick, to match the mood of a paper planner. Nothing here is
    decoration: each move either confirms a press, shows where something came

@@ -48,7 +48,7 @@
       <p class="welcome-restore">Coming back to a plan you saved?
         <button type="button" class="btn-inline" id="btn-restore-welcome">Restore the file</button>
       </p>
-      <p class="welcome-guide">New here? <a class="btn-inline" href="guide.html">What every part does, and what the exported files are</a></p>
+      <p class="welcome-guide">New here? <a class="btn-inline" href="guide.html">How to use this, step by step</a></p>
       <p class="export-status" id="welcome-status" role="status"></p>
       <input type="file" id="file-restore" accept="application/json,.json" hidden>
     </section>
@@ -136,7 +136,7 @@
         </div>
 
         <details class="export" id="export">
-          <summary>Take it with you</summary>
+          <summary>Export &amp; backup</summary>
           <div class="export-panel">
             <div class="export-actions">
               <button type="button" class="btn btn-quiet" id="btn-ics">Calendar file <span class="btn-ext">.ics</span></button>
@@ -144,7 +144,17 @@
               <button type="button" class="btn btn-quiet" id="btn-json">Save a copy <span class="btn-ext">.json</span></button>
               <button type="button" class="btn btn-quiet" id="btn-restore">Restore a copy</button>
             </div>
-            <p class="export-note">The calendar file is a standard <span class="mono">.ics</span> — import it into Apple Calendar, Google Calendar, Outlook, Thunderbird, anything. Every session lands as its own timed event, starting from the time you set in step 1 and running through the day in order, breaks included. The JSON is the whole plan, ticks included — keep it somewhere that is not this browser.</p>
+            <dl class="export-what">
+              <dt>Calendar file <span class="mono">.ics</span></dt>
+              <dd>For Apple Calendar, Google Calendar, Outlook — every session as a timed event.</dd>
+              <dt>Spreadsheet <span class="mono">.csv</span></dt>
+              <dd>For Excel, Numbers or Google Sheets — one row per session.</dd>
+              <dt>Save a copy <span class="mono">.json</span></dt>
+              <dd>The whole plan, ticks included. To keep, or to move to another device.</dd>
+              <dt>Restore a copy</dt>
+              <dd>Loads a saved <span class="mono">.json</span> back exactly as it was.</dd>
+            </dl>
+            <p class="export-note">Nothing here needs an account, and nothing is uploaded — the file is built in your browser. The calendar file carries the start time from section 1, so each session gets a real clock time.</p>
 
             <p class="export-help"><a class="btn-inline" href="guide.html#files">How do I open these files?</a></p>
             <p class="export-status" id="export-status" role="status"></p>
