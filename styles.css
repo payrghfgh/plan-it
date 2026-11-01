@@ -1533,6 +1533,17 @@ input.t-subject {
 
 .guide-steps em { font-style: italic; color: var(--ink); }
 
+.guide-callout {
+  margin: 14px 0 0 !important;
+  padding: 12px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--paper);
+  font-size: .88rem !important;
+  line-height: 1.55;
+  color: var(--ink-2) !important;
+}
+
 /* what each export file is for, at the point of export */
 .export-what {
   margin: 14px 0 0;
