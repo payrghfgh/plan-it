@@ -1,0 +1,14 @@
+# dependencies (there are none, but keep editors honest)
+node_modules/
+
+# local env — nothing here needs a secret, this is just hygiene
+.env
+.env.*
+!.env.example
+
+# build output and editor noise
+dist/
+.netlify/
+.DS_Store
+Thumbs.db
+*.log
