@@ -248,9 +248,16 @@ body {
 
 .fields {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .8fr) minmax(0, .6fr);
   gap: 24px;
 }
+
+input[type="time"] {
+  font-family: var(--mono);
+  font-size: .92rem;
+}
+
+.mono { font-family: var(--mono); font-size: .95em; }
 
 .field { min-width: 0; }
 
@@ -1069,6 +1076,8 @@ input.t-subject {
 
   .field-hours { max-width: 190px; }
 
+  .field-start { max-width: 160px; }
+
   .masthead { padding: 24px 0 16px; }
 
   .standfirst { font-size: .94rem; }
@@ -1257,65 +1266,6 @@ input.t-subject {
 .export-status.is-error { color: var(--danger); }
 
 .export-status:empty { display: none; }
-
-/* ---------- google calendar ---------- */
-
-.gcal {
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px solid var(--rule-soft);
-}
-
-.gcal-head {
-  margin: 0 0 9px;
-  font-family: var(--sans);
-  font-size: .66rem;
-  font-weight: 600;
-  letter-spacing: .09em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.gcal-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.gcal-chip {
-  padding: 6px 9px;
-  border: 1px solid var(--rule);
-  border-radius: 2px;
-  font-family: var(--mono);
-  font-size: .7rem;
-  color: var(--ink-2);
-  text-decoration: none;
-  transition: border-color 140ms var(--ease-out), color 140ms var(--ease-out);
-}
-
-.gcal-chip:hover { border-color: var(--ink-2); color: var(--ink); }
-
-.gcal-chip.is-exam { border-color: var(--amber); color: var(--amber-ink); }
-
-.gcal-chip.is-all {
-  border-color: var(--ink);
-  background: var(--ink);
-  color: var(--sheet);
-  font-family: var(--sans);
-  font-size: .8rem;
-  font-weight: 500;
-  padding: 8px 12px;
-}
-
-.gcal-chip.is-all:hover { background: var(--ink-2); border-color: var(--ink-2); color: var(--sheet); }
-
-.gcal-note {
-  margin: 11px 0 0;
-  max-width: 62ch;
-  font-size: .78rem;
-  line-height: 1.5;
-  color: var(--muted);
-}
 
 /* ---------- where each topic stands ---------- */
 

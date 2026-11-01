@@ -15,6 +15,7 @@
   var state = {
     examDate: '',
     hoursPerDay: 2,
+    startTime: '09:00',
     daysOff: [],
     topics: [],
     plan: null,
@@ -108,6 +109,7 @@
       localStorage.setItem(STORE_KEY, JSON.stringify({
         examDate: state.examDate,
         hoursPerDay: state.hoursPerDay,
+        startTime: state.startTime,
         daysOff: state.daysOff,
         topics: state.topics,
         plan: state.plan,
@@ -126,6 +128,7 @@
       var data = JSON.parse(raw);
       state.examDate = data.examDate || '';
       state.hoursPerDay = typeof data.hoursPerDay === 'number' ? data.hoursPerDay : 2;
+      state.startTime = typeof data.startTime === 'string' && /^\d{2}:\d{2}$/.test(data.startTime) ? data.startTime : '09:00';
       state.daysOff = Array.isArray(data.daysOff) ? data.daysOff : [];
       state.topics = Array.isArray(data.topics) ? data.topics : [];
       state.plan = data.plan || null;
@@ -157,6 +160,7 @@
     lastRowKey = null;
     el.examDate.value = state.examDate;
     el.hours.value = String(state.hoursPerDay);
+    el.startTime.value = state.startTime;
     el.rows.innerHTML = '';
     renderDayToggles();
     renderDeadlineSummary();
@@ -310,7 +314,6 @@
       el.overflow.innerHTML = '';
       el.planStats.innerHTML = '';
       el.topicProgress.hidden = true;
-      if (el.gcalLinks) el.gcalLinks.innerHTML = '';
       el.progress.hidden = true;
       el.todayLine.textContent = '';
       el.runninghead.hidden = true;
@@ -347,7 +350,6 @@
     renderTodayLine(plan, past);
     renderWeeks(plan, past, !!state.enterNext);
     renderTopicProgress(plan);
-    renderGcalLinks(plan);
     state.enterNext = false;
     renderOverflow(plan);
     el.stepPlan.classList.toggle('is-readonly', past);
@@ -580,8 +582,27 @@
     return P.toISO(P.addDays(P.fromISO(iso), 1));
   }
 
+  function minutesFromClock(hhmm) {
+    var parts = String(hhmm || '09:00').split(':');
+    var h = Math.min(23, Math.max(0, parseInt(parts[0], 10) || 0));
+    var m = Math.min(59, Math.max(0, parseInt(parts[1], 10) || 0));
+    return h * 60 + m;
+  }
+
+  // A floating local timestamp: no Z, no TZID. Every calendar app reads it in
+  // the timezone of the person importing, which is what "9am" should mean.
+  function icsStamp(dateIso, minutes) {
+    var d = P.fromISO(dateIso);
+    var h = Math.floor(minutes / 60);
+    var m = minutes % 60;
+    function p2(n) { return (n < 10 ? '0' : '') + n; }
+    return '' + d.getFullYear() + p2(d.getMonth() + 1) + p2(d.getDate()) +
+      'T' + p2(h) + p2(m) + '00';
+  }
+
   function buildIcs(plan) {
     var stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    var dayStart = minutesFromClock(state.startTime);
     var lines = [
       'BEGIN:VCALENDAR',
       'VERSION:2.0',
@@ -592,29 +613,49 @@
     ];
 
     plan.days.forEach(function (day) {
-      if (!day.sessions.length) return;
-      var summary = P.formatMinutes(day.minutes) + ' of study, ' +
-        day.sessions.length + (day.sessions.length === 1 ? ' session' : ' sessions');
-      var description = day.sessions.map(function (s) {
-        return (s.done ? '[done] ' : '') + s.subject + ' — ' + s.name + ' (' + P.formatMinutes(s.minutes) + ')';
-      }).join('\n');
+      var cursor = dayStart;
 
-      lines.push('BEGIN:VEVENT');
-      lines.push('UID:planit-' + day.date + '@plan-it.local');
-      lines.push('DTSTAMP:' + stamp);
-      lines.push('DTSTART;VALUE=DATE:' + icsDate(day.date));
-      lines.push('DTEND;VALUE=DATE:' + icsDate(nextDay(day.date)));
-      lines.push(foldLine('SUMMARY:' + icsEscape(summary)));
-      lines.push(foldLine('DESCRIPTION:' + icsEscape(description)));
-      lines.push('TRANSP:TRANSPARENT');
-      lines.push('END:VEVENT');
+      day.sessions.forEach(function (s, i) {
+        if (s.breakBefore) cursor += 10;      // the break between split chunks
+        var from = cursor;
+        var to = cursor + s.minutes;
+        cursor = to;
+
+        var summary = s.subject + ' — ' + s.name;
+        var description = P.formatMinutes(s.minutes) +
+          (s.kind === 'review' ? ', revision' : ', first pass') +
+          ' · from your Plan It timetable';
+
+        lines.push('BEGIN:VEVENT');
+        lines.push('UID:planit-' + day.date + '-' + i + '-' + s.topicId + '@plan-it.local');
+        lines.push('DTSTAMP:' + stamp);
+        lines.push('DTSTART:' + icsStamp(day.date, from));
+        lines.push('DTEND:' + icsStamp(day.date, to));
+        lines.push(foldLine('SUMMARY:' + icsEscape(summary)));
+        lines.push(foldLine('DESCRIPTION:' + icsEscape(description)));
+        lines.push('CATEGORIES:' + icsEscape(s.subject));
+        lines.push('TRANSP:OPAQUE');
+        lines.push('END:VEVENT');
+      });
     });
 
+    // the exam itself, all day
     lines.push('BEGIN:VEVENT');
     lines.push('UID:planit-exam-' + plan.examDate + '@plan-it.local');
     lines.push('DTSTAMP:' + stamp);
     lines.push('DTSTART;VALUE=DATE:' + icsDate(plan.examDate));
     lines.push('DTEND;VALUE=DATE:' + icsDate(nextDay(plan.examDate)));
+
+    var leftovers = (plan.overflow || []).map(function (o) {
+      return o.subject + ' — ' + o.name + ' (' + P.formatMinutes(o.minutes) + ')';
+    });
+    var examText = 'Exam day. Planned with Plan It: ' +
+      (plan.stats.sessionCount || 0) + ' sessions, ' +
+      P.formatMinutes(plan.stats.scheduledMinutes || 0) + ' of work.';
+    if (leftovers.length) {
+      examText += '\n\nIf you get time:\n' + leftovers.join('\n');
+    }
+    lines.push(foldLine('DESCRIPTION:' + icsEscape(examText)));
     lines.push('SUMMARY:Exam day');
     lines.push('TRANSP:OPAQUE');
     lines.push('END:VEVENT');
@@ -658,6 +699,7 @@
       state: {
         examDate: state.examDate,
         hoursPerDay: state.hoursPerDay,
+        startTime: state.startTime,
         daysOff: state.daysOff,
         topics: state.topics,
         plan: state.plan,
@@ -683,6 +725,7 @@
 
     state.examDate = s.examDate;
     state.hoursPerDay = typeof s.hoursPerDay === 'number' ? s.hoursPerDay : 2;
+    state.startTime = typeof s.startTime === 'string' && /^\d{2}:\d{2}$/.test(s.startTime) ? s.startTime : '09:00';
     state.daysOff = Array.isArray(s.daysOff) ? s.daysOff : [];
     state.topics = s.topics;
     state.plan = s.plan;
@@ -690,6 +733,7 @@
     lastRowKey = null;
     el.examDate.value = state.examDate;
     el.hours.value = String(state.hoursPerDay);
+    el.startTime.value = state.startTime;
     el.rows.innerHTML = '';
     renderDayToggles();
     renderDeadlineSummary();
@@ -705,84 +749,6 @@
     var base = state.plan && state.plan.examDate ? 'plan-it-' + state.plan.examDate : 'plan-it';
     if (kind === 'json') return 'plan-it-backup-' + todayISO() + '.json';
     return base + '.' + kind;
-  }
-
-  /* ---------- Google Calendar quick links ----------
-     The add-to-calendar URL needs no API key and no OAuth: it opens Google
-     Calendar's own event form with the fields filled in, and the user saves it.
-     Google Tasks has no equivalent — creating a task needs a signed-in API —
-     so there is no Tasks link here on purpose. */
-
-  function gcalUrl(title, dateIso, details) {
-    return 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
-      '&text=' + encodeURIComponent(title) +
-      '&dates=' + icsDate(dateIso) + '/' + icsDate(nextDay(dateIso)) +
-      '&details=' + encodeURIComponent(details);
-  }
-
-  var DAY_CODES = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
-
-  // One link for the whole plan: a single all-day event that repeats on every
-  // study weekday, so days off are skipped for free and nothing has to be added
-  // one day at a time. The full timetable rides in the event description.
-  function gcalAllUrl(plan) {
-    var studyDays = plan.days.filter(function (d) { return d.sessions.length; });
-    if (!studyDays.length) return null;
-
-    var first = studyDays[0].date;
-    var last = studyDays[studyDays.length - 1].date;
-
-    var codes = [];
-    studyDays.forEach(function (d) {
-      var code = DAY_CODES[d.weekday];
-      if (codes.indexOf(code) === -1) codes.push(code);
-    });
-
-    var lines = [];
-    studyDays.forEach(function (day) {
-      lines.push(day.dayShort + ' ' + day.label + ' — ' + P.formatMinutes(day.minutes));
-      day.sessions.forEach(function (s) {
-        lines.push('  ' + s.subject + ' — ' + s.name + ' (' + P.formatMinutes(s.minutes) + ')');
-      });
-      lines.push('');
-    });
-
-    var subjects = [];
-    studyDays.forEach(function (day) {
-      day.sessions.forEach(function (s) {
-        if (subjects.indexOf(s.subject) === -1) subjects.push(s.subject);
-      });
-    });
-
-    var title = 'Study plan · ' + subjects.join(', ');
-    var details = 'Planned with Plan It. ' + P.formatMinutes(plan.stats.scheduledMinutes || 0) +
-      ' of work across ' + studyDays.length + ' study days, exam on ' + shortDate(plan.examDate) + '.\n\n' +
-      lines.join('\n').trim();
-
-    return 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
-      '&text=' + encodeURIComponent(title) +
-      '&dates=' + icsDate(first) + '/' + icsDate(nextDay(first)) +
-      '&details=' + encodeURIComponent(details) +
-      '&recur=' + encodeURIComponent('RRULE:FREQ=WEEKLY;BYDAY=' + codes.join(',') + ';UNTIL=' + icsDate(last));
-  }
-
-  function renderGcalLinks(plan) {
-    if (!el.gcalLinks) return;
-
-    var all = gcalAllUrl(plan);
-    var parts = [];
-
-    if (all) {
-      parts.push('<a class="gcal-chip is-all" target="_blank" rel="noopener" href="' + esc(all) + '">' +
-        'Add every study day — one event</a>');
-    }
-
-    var examDetails = (plan.stats.sessionCount || 0) + ' sessions, ' +
-      P.formatMinutes(plan.stats.scheduledMinutes || 0) + ' of work. Planned with Plan It.';
-    parts.push('<a class="gcal-chip is-exam" target="_blank" rel="noopener" href="' +
-      esc(gcalUrl('Exam day', plan.examDate, examDetails)) + '">Exam day · ' + esc(shortDate(plan.examDate)) + '</a>');
-
-    el.gcalLinks.innerHTML = parts.join('');
   }
 
   /* ---------- where each topic stands ---------- */
@@ -867,6 +833,11 @@
       renderDeadlineSummary();
       renderTopics();
       renderPlan();
+      save();
+    });
+
+    el.startTime.addEventListener('input', function () {
+      state.startTime = el.startTime.value || '09:00';
       save();
     });
 
@@ -1058,6 +1029,7 @@
       try { localStorage.removeItem(STORE_KEY); } catch (err) { /* nothing to clear */ }
       state.examDate = '';
       state.hoursPerDay = 2;
+      state.startTime = '09:00';
       state.daysOff = [];
       state.topics = [];
       state.plan = null;
@@ -1065,6 +1037,7 @@
       lastRowKey = null;
       el.examDate.value = '';
       el.hours.value = '2';
+      el.startTime.value = '09:00';
       el.pasteBox.value = '';
       el.rows.innerHTML = '';
       renderDayToggles();
@@ -1105,6 +1078,7 @@
       stepPlan: $('step-plan'),
       examDate: $('exam-date'),
       hours: $('hours'),
+      startTime: $('start-time'),
       dayToggles: $('day-toggles'),
       deadlineSummary: $('deadline-summary'),
       pasteBox: $('paste-box'),
@@ -1140,8 +1114,7 @@
       btnRestoreWelcome: $('btn-restore-welcome'),
       topicProgress: $('topic-progress'),
       topicProgressSummary: $('topic-progress-summary'),
-      topicProgressBody: $('topic-progress-body'),
-      gcalLinks: $('gcal-links')
+      topicProgressBody: $('topic-progress-body')
     };
 
     stampToday();
@@ -1149,6 +1122,7 @@
     if (load()) {
       el.examDate.value = state.examDate;
       el.hours.value = String(state.hoursPerDay);
+      el.startTime.value = state.startTime;
     }
 
     wire();

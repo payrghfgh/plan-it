@@ -63,7 +63,12 @@
               <span class="unit">h</span>
             </div>
           </div>
+          <div class="field field-start">
+            <label for="start-time">Study starts at</label>
+            <input type="time" id="start-time" value="09:00" step="900">
+          </div>
         </div>
+        <p class="note">The start time only shapes the calendar file — the plan itself is measured in minutes.</p>
 
         <fieldset class="days-off">
           <legend>Days off</legend>
@@ -131,13 +136,7 @@
               <button type="button" class="btn btn-quiet" id="btn-json">Save a copy <span class="btn-ext">.json</span></button>
               <button type="button" class="btn btn-quiet" id="btn-restore">Restore a copy</button>
             </div>
-            <p class="export-note">The calendar file adds one all-day event per study day to Google Calendar, Apple Calendar or Outlook. The JSON is the whole plan, ticks included — keep it somewhere that is not this browser.</p>
-
-            <div class="gcal">
-              <p class="gcal-head">Google Calendar</p>
-              <div class="gcal-links" id="gcal-links"></div>
-              <p class="gcal-note">One link, one event: it repeats on every study day and skips your days off, with the whole timetable in its description. No sign-in to this page and no API key. If you would rather have a separate event for each day, import the .ics above instead (Google Calendar → Settings → Import &amp; export). Google Tasks is deliberately not offered: creating tasks needs a signed-in API connection, and this page has no account.</p>
-            </div>
+            <p class="export-note">The calendar file is a standard <span class="mono">.ics</span> — import it into Apple Calendar, Google Calendar, Outlook, Thunderbird, anything. Every session lands as its own timed event, starting from the time you set in step 1 and running through the day in order, breaks included. The JSON is the whole plan, ticks included — keep it somewhere that is not this browser.</p>
 
             <p class="export-status" id="export-status" role="status"></p>
           </div>

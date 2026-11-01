@@ -124,23 +124,33 @@ linked stylesheet.
   a **See a sample plan** button that loads a realistic eight-topic exam in one
   click, so the planner can be judged before anything is typed.
 - **Take it with you** — export from the plan:
-  - `.ics` calendar file: one all-day event per study day plus the exam itself,
-    folded to RFC 5545. Imports into Google Calendar, Apple Calendar, Outlook.
+  - `.ics` calendar file: **one timed event per session**, laid out through the
+    day from the start time set in step 1, with the 10-minute breaks between
+    split chunks left as real gaps. Floating local times (no `Z`, no `TZID`), so
+    every calendar reads them in the importer's own timezone. Plus an all-day
+    event on the exam date carrying the leftover "if you get time" topics in its
+    description. Standard iCalendar — Apple Calendar, Google Calendar, Outlook,
+    Thunderbird, anything. Folded to RFC 5545 at 75 octets, CRLF line endings,
+    commas and semicolons escaped.
   - `.csv`: one row per session, plus the "if you get time" leftovers, ready for
     a spreadsheet.
   - `.json` backup of the whole plan including every tick, and **Restore**, which
     works from the welcome screen too — so a cleared browser is not the end of
     the plan. A file that is not a backup is refused with a plain message.
-- **One Google Calendar link for the whole plan**, plus one for exam day. The
-  plan link opens a single all-day event that repeats on every study weekday
-  (`RRULE:FREQ=WEEKLY;BYDAY=…;UNTIL=<last study day>`), so days off are skipped
-  for free and nothing is added a day at a time. The full timetable rides in the
-  event description. It uses the public add-to-calendar URL: no API key, no
-  OAuth, no account on this page. If you want a separate event per day instead,
-  import the `.ics`. Google Tasks is deliberately absent — creating a task needs
-  a signed-in API connection, and this page has no backend.
 - **Where each topic stands**: every topic with its sessions, how many are done,
   and how much time is left, including the ones that did not fit at all.
+
+## The calendar file
+
+There is no Google or Apple integration to connect, and nothing to sign into:
+the export is a plain `.ics`, which every calendar app already understands.
+Import it once and the timetable is yours — Apple Calendar (File → Import),
+Google Calendar (Settings → Import & export), Outlook (File → Open & Export).
+
+Because a plan is measured in minutes rather than clock times, step 1 asks when
+you start studying (default 09:00). The export lays each day out from that time
+in order, so a 45-minute session, a 10-minute break and a 30-minute session come
+out as 09:00–09:45, then 09:55–10:25.
 
 ## Files
 
