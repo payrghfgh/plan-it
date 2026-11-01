@@ -168,6 +168,8 @@ out as 09:00–09:45, then 09:55–10:25.
 | `planner.js` | The scheduling engine. Pure functions, no DOM |
 | `app.js` | Reads the form, calls the engine, draws the plan, saves to `localStorage` |
 | `guide.html` | A guide to every part, and how to import the export files |
+| `favicon.svg`, `favicon.ico`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png` | The app icon: SVG for modern browsers, a multi-size `.ico` for the rest, 180px opaque for iOS home screen, 192/512 for the manifest |
+| `site.webmanifest` | Name, colours and icons so "Add to Home Screen" gets the right icon |
 | `tests/acceptance.js` | Every check from the brief, runnable with `node` |
 
 ## The scheduling rules
